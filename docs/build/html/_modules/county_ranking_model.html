@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>county_ranking_model &mdash; Food-Insecurity-Analysis v4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Food-Insecurity-Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Food-Insecurity-Analysis-main</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Food-Insecurity-Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>county_ranking_model</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for county_ranking_model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Filename: county_ranking_model.py</span>
+<span class="c1"># Author: Haoyu Wang, Jiaxuan Zhang</span>
+<span class="c1"># Date: 05/27/2022</span>
+<span class="c1">#</span>
+<span class="c1"># Description:</span>
+<span class="c1">#   This file will implement a model to capture county food insecurity ranking</span>
+<span class="c1"># in California.It takes 5 factors into account: overall food insecurity(fi) rate,</span>
+<span class="c1"># density of food insecure people, child fi rate, budget shortfall and fi changes</span>
+<span class="c1"># in recent 2 years. The result will be visualized by a choropleth map where a</span>
+<span class="c1"># dark color corresponds to a severe degree of food insecurity.</span>
+<span class="c1">#</span>
+<span class="c1"># Functions:</span>
+<span class="c1"># prepare_data(): prepare the food insecurity data</span>
+<span class="c1"># rank_county(): rank the county food insecurity degree</span>
+<span class="c1"># result_visual(): visualize the result</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rankdata</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+
+<div class="viewcode-block" id="prepare_data"><a class="viewcode-back" href="../county_ranking_model.html#county_ranking_model.prepare_data">[docs]</a><span class="k">def</span> <span class="nf">prepare_data</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function will prepare the data in the following 5 categories:</span>
+<span class="sd">    |1. FI: overall food insecurity(fi) rate|</span>
+<span class="sd">    |2. FI_Density: density of food insecure people|</span>
+<span class="sd">    |3. Child_FI: child fi rate|</span>
+<span class="sd">    |4. Budget: budget shortfall|</span>
+<span class="sd">    |5. FI_Change: fi changes in recent 2 years|</span>
+<span class="sd">    </span>
+<span class="sd">    :return: county FIPS, name and data above</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Read data from csv</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/2019_fi_data.csv&#39;</span><span class="p">)</span>
+    <span class="n">df_2018</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/2018_fi_data.csv&#39;</span><span class="p">)</span>
+    <span class="n">df_land_area</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/CA_land_area.csv&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Add 2018 fi data to main df</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;2018 Food Insecurity Rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_2018</span><span class="p">[</span><span class="s1">&#39;2018 Food Insecurity Rate&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Convert county names</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CountyName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;County, State&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; County&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;County, State&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Get land area data</span>
+    <span class="n">df_land_area</span><span class="p">[</span><span class="s1">&#39;LandAreaInSqMi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_land_area</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)))</span>
+    <span class="n">df_land_area</span><span class="p">[</span><span class="s1">&#39;CountyName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_land_area</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">df_land_area</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Add land area data to df</span>
+    <span class="n">df_land_area</span> <span class="o">=</span> <span class="n">df_land_area</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;CountyName&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">df_land_area</span><span class="p">[</span><span class="s1">&#39;CountyName&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;CountyName&#39;</span><span class="p">]))</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;LandAreaInSqMi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_land_area</span><span class="p">[</span><span class="s1">&#39;LandAreaInSqMi&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+    <span class="c1"># Compute FI_Density</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FI_Density&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;# of Food Insecure Persons in 2019&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;LandAreaInSqMi&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;# of Food Insecure Persons in 2019&#39;</span><span class="p">,</span><span class="s1">&#39;LandAreaInSqMi&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Compute FI_Change</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FI_Change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;2019 Food Insecurity Rate&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;2018 Food Insecurity Rate&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;2018 Food Insecurity Rate&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Rename and order columns</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;2019 Food Insecurity Rate&#39;</span><span class="p">:</span><span class="s1">&#39;FI&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;2019 Child food insecurity rate&#39;</span><span class="p">:</span><span class="s1">&#39;Child_FI&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;2019 Weighted Annual Food Budget Shortfall&#39;</span><span class="p">:</span><span class="s1">&#39;Budget_Shortfall&#39;</span><span class="p">})</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">,</span><span class="s1">&#39;CountyName&#39;</span><span class="p">,</span><span class="s1">&#39;FI&#39;</span><span class="p">,</span><span class="s1">&#39;FI_Density&#39;</span><span class="p">,</span><span class="s1">&#39;Child_FI&#39;</span><span class="p">,</span><span class="s1">&#39;Budget_Shortfall&#39;</span><span class="p">,</span><span class="s1">&#39;FI_Change&#39;</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="rank_county"><a class="viewcode-back" href="../county_ranking_model.html#county_ranking_model.rank_county">[docs]</a><span class="k">def</span> <span class="nf">rank_county</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function will rank the counties&#39; food insecurity degree based on the 5 factors.</span>
+<span class="sd">    A higher ranking score indicates the county has more severe food insecurity issues.</span>
+<span class="sd">    </span>
+<span class="sd">    :param df: dataframe returned from prepared_data :type: pd.DataFrame</span>
+<span class="sd">    :return: prepared data with ranking data</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Give a ranking for each factor</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_FI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;FI&#39;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_FI_Density&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;FI_Density&#39;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_Child_FI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Child_FI&#39;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_Budget_Shortfall&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Budget_Shortfall&#39;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_FI_Change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;FI_Change&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Compute a overall ranking</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FI_Ranking_Scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_FI&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_FI_Density&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_Child_FI&#39;</span><span class="p">]</span>\
+                         <span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_Budget_Shortfall&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rank_FI_Change&#39;</span><span class="p">])</span><span class="o">/</span><span class="mi">5</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="result_visual"><a class="viewcode-back" href="../county_ranking_model.html#county_ranking_model.result_visual">[docs]</a><span class="k">def</span> <span class="nf">result_visual</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function will visualize the result, a choropleth map, using the ranking data.</span>
+<span class="sd">    </span>
+<span class="sd">    :param df: dataframe returned from rank_county</span>
+<span class="sd">    :return: none</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Prepare FIPS and ranking data for plot</span>
+    <span class="n">df_plot</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">,</span><span class="s1">&#39;FI_Ranking_Scores&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df_plot</span><span class="p">[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_plot</span><span class="p">[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span><span class="s1">&#39;0&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">min_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">df_plot</span><span class="p">[</span><span class="s1">&#39;FI_Ranking_Scores&#39;</span><span class="p">]))</span>
+    <span class="n">df_plot</span><span class="p">[</span><span class="s1">&#39;Food Insecurity Degree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_plot</span><span class="p">[</span><span class="s1">&#39;FI_Ranking_Scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">-</span> <span class="n">min_score</span><span class="p">)</span>
+    <span class="n">max_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">df_plot</span><span class="p">[</span><span class="s1">&#39;Food Insecurity Degree&#39;</span><span class="p">]))</span>
+
+    <span class="c1"># Get json data</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json&#39;</span>
+    <span class="k">with</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+        <span class="n">counties</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="c1"># Plot color</span>
+    <span class="n">colorscale</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#f7fbff&quot;</span><span class="p">,</span><span class="s2">&quot;#ebf3fb&quot;</span><span class="p">,</span><span class="s2">&quot;#deebf7&quot;</span><span class="p">,</span><span class="s2">&quot;#d2e3f3&quot;</span><span class="p">,</span><span class="s2">&quot;#c6dbef&quot;</span><span class="p">,</span><span class="s2">&quot;#b3d2e9&quot;</span><span class="p">,</span><span class="s2">&quot;#9ecae1&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;#85bcdb&quot;</span><span class="p">,</span><span class="s2">&quot;#6baed6&quot;</span><span class="p">,</span><span class="s2">&quot;#57a0ce&quot;</span><span class="p">,</span><span class="s2">&quot;#4292c6&quot;</span><span class="p">,</span><span class="s2">&quot;#3082be&quot;</span><span class="p">,</span><span class="s2">&quot;#2171b5&quot;</span><span class="p">,</span><span class="s2">&quot;#1361a9&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;#08519c&quot;</span><span class="p">,</span><span class="s2">&quot;#0b4083&quot;</span><span class="p">,</span><span class="s2">&quot;#08306b&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Plot the graph</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">df_plot</span><span class="p">,</span> <span class="n">geojson</span><span class="o">=</span><span class="n">counties</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="s1">&#39;FIPS&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Food Insecurity Degree&#39;</span><span class="p">,</span>
+                               <span class="n">color_continuous_scale</span><span class="o">=</span><span class="n">colorscale</span><span class="p">,</span>
+                               <span class="n">range_color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">max_score</span><span class="p">),</span>
+                               <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;usa&quot;</span>
+                              <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_geos</span><span class="p">(</span><span class="n">fitbounds</span><span class="o">=</span><span class="s2">&quot;locations&quot;</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;t&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;l&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<span class="c1">## Visualize the result</span>
+<span class="c1">#df = prepare_data()</span>
+<span class="c1">#df = rank_county(df)</span>
+<span class="c1">#result_visual(df)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, ECE229 Group 3.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

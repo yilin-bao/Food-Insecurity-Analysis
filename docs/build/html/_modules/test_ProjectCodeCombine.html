@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>test_ProjectCodeCombine &mdash; Food-Insecurity-Analysis v4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Food-Insecurity-Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Food-Insecurity-Analysis-main</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Food-Insecurity-Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>test_ProjectCodeCombine</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for test_ProjectCodeCombine</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ProjectCodeCombine</span> <span class="k">as</span> <span class="nn">pcc</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<span class="kn">import</span> <span class="nn">imageio</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">plotly</span>
+<span class="kn">import</span> <span class="nn">plotly.figure_factory</span> <span class="k">as</span> <span class="nn">ff</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.offline</span> <span class="k">as</span> <span class="nn">py</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">plotly.offline</span> <span class="kn">import</span> <span class="n">init_notebook_mode</span><span class="p">,</span> <span class="n">iplot</span><span class="p">,</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">plotly</span> <span class="kn">import</span> <span class="n">tools</span>
+<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rankdata</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
+<span class="c1"># import pytest</span>
+
+<span class="c1"># Import Data</span>
+<span class="n">data_0911</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/home/kic/python/Food-Insecurity-Analysis-main/data/MMG2011_2009Data_ToShare.xlsx&#39;</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;2009 County&#39;</span><span class="p">,</span><span class="n">header</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;FIPS&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">})</span>
+<span class="n">data_0911</span> <span class="o">=</span> <span class="n">data_0911</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3137</span><span class="p">]</span>
+
+<span class="n">snap</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/home/kic/python/Food-Insecurity-Analysis-main/data/ACSST5Y2020.S2201-2022-05-24T041743.xlsx&#39;</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">,</span><span class="n">header</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;FIPS&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">})</span>
+<span class="n">past_t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/home/kic/python/Food-Insecurity-Analysis-main/data/past_trend.csv&#39;</span><span class="p">)</span>
+
+<span class="n">data_race</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/home/kic/python/Food-Insecurity-Analysis-main/data/2022 food insecurity vs race .csv&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="test_draw_FIrate"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_draw_FIrate">[docs]</a><span class="k">def</span> <span class="nf">test_draw_FIrate</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function test if vdraw_FIrate works well. It ensures it outputs a pd.DataFrame,</span>
+<span class="sd">    and the dataframe has shape (28282,3), and columns as shown below.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">t</span> <span class="o">=</span> <span class="n">pcc</span><span class="o">.</span><span class="n">draw_FIrate</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">28282</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">,</span> <span class="s1">&#39;Rate of Food Insecurity&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="test_visualization_food_insecurity_map"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_visualization_food_insecurity_map">[docs]</a><span class="k">def</span> <span class="nf">test_visualization_food_insecurity_map</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if visualization_food_insecurity_map works well. It ensures the output </span>
+<span class="sd">    is a go.Figure.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">visualization_food_insecurity_map</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">draw_FIrate</span><span class="p">()),</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_visualization_food_cost_map"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_visualization_food_cost_map">[docs]</a><span class="k">def</span> <span class="nf">test_visualization_food_cost_map</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if visualization_food_cost_map works well. It ensures the output </span>
+<span class="sd">    is a go.Figure.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">visualization_food_cost_map</span><span class="p">(</span><span class="n">data_0911</span><span class="p">),</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_visualization_food_insecurity_plot"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_visualization_food_insecurity_plot">[docs]</a><span class="k">def</span> <span class="nf">test_visualization_food_insecurity_plot</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if visualization_food_insecurity_plot works well. It ensures the output </span>
+<span class="sd">    is a go.Figure.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">visualization_food_insecurity_plot</span><span class="p">(</span><span class="n">past_t</span><span class="p">),</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_visualization_food_insecurity_race"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_visualization_food_insecurity_race">[docs]</a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;matplotlib.pyplot.show&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_visualization_food_insecurity_race</span><span class="p">(</span><span class="n">mock_show</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if visualization_food_insecurity_race works well. </span>
+
+<span class="sd">    :Parameters:</span>
+<span class="sd">        mock_show: this parameter inputs data for visualization.</span>
+<span class="sd">    :Parameter type: </span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pcc</span><span class="o">.</span><span class="n">visualization_food_insecurity_race</span><span class="p">(</span><span class="n">data_race</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_visualization_household"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_visualization_household">[docs]</a><span class="k">def</span> <span class="nf">test_visualization_household</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if visualization_household works well. It ensures the output </span>
+<span class="sd">    is a go.Figure</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">visualization_household</span><span class="p">(</span><span class="n">snap</span><span class="p">),</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_prepare_data"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_prepare_data">[docs]</a><span class="k">def</span> <span class="nf">test_prepare_data</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if prepare data function works well. It ensures prepare_data() </span>
+<span class="sd">    </span>
+<span class="sd">    :Return: </span>
+<span class="sd">         returns a pd.DataFrame that has shape (58,7), and has column names as shown as below. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">pcc</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">58</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;CountyName&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI_Density&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Child_FI&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Budget_Shortfall&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI_Change&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="test_rank_county"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_rank_county">[docs]</a><span class="k">def</span> <span class="nf">test_rank_county</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function test if rank_county function works well. It test if its output is a     pd.DataFrame with shape (58, 13), and the columns of the dataframe is as shown below. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">pcc</span><span class="o">.</span><span class="n">rank_county</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">())</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">58</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;FIPS&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;CountyName&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI_Density&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Child_FI&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Budget_Shortfall&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI_Change&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Rank_FI&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Rank_FI_Density&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Rank_Child_FI&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Rank_Budget_Shortfall&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Rank_FI_Change&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;FI_Ranking_Scores&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="test_result_visual"><a class="viewcode-back" href="../test_ProjectCodeCombine.html#test_ProjectCodeCombine.test_result_visual">[docs]</a><span class="k">def</span> <span class="nf">test_result_visual</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This funtion test if result_visual works well. It first prepare data, and use the data for rank_county. Then its output is fed in to result_visual, and check if the output is go.Figure.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pcc</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">pcc</span><span class="o">.</span><span class="n">rank_county</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">result_visual</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, ECE229 Group 3.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

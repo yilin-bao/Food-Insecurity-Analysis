@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>test_ProjectCodeCombine module &mdash; Food-Insecurity-Analysis v4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="countyBasic Questionranking_model module" href="county_ranking_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Food-Insecurity-Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Food-Insecurity-Analysis-main</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ProjectCodeCombine.html">ProjectCodeCombine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="county_ranking_model.html">countyBasic Questionranking_model module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">test_ProjectCodeCombine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#file-description">File Description:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Food-Insecurity-Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Food-Insecurity-Analysis-main</a> &raquo;</li>
+      <li>test_ProjectCodeCombine module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/test_ProjectCodeCombine.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="test-projectcodecombine-module">
+<h1>test_ProjectCodeCombine module<a class="headerlink" href="#test-projectcodecombine-module" title="Permalink to this headline">¶</a></h1>
+<section id="file-description">
+<h2>File Description:<a class="headerlink" href="#file-description" title="Permalink to this headline">¶</a></h2>
+<p>This file contains tests for all functions we used. For example, we ensure the column names are correct in the dataset fed into the visualization function draw_FIrate(), it must be pd.DataFrame with a shape of (28282, 3), and columns ‘FIPS’, ‘Rate of Food Insecurity’, ‘year’. In addition to this test, we also ensure the output types and information of other functions.</p>
+<span class="target" id="module-test_ProjectCodeCombine"></span><dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_draw_FIrate">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_draw_FIrate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_draw_FIrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if vdraw_FIrate works well. It ensures it outputs a pd.DataFrame,
+and the dataframe has shape (28282,3), and columns as shown below.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_prepare_data">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_prepare_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if prepare data function works well. It ensures prepare_data()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return</dt>
+<dd class="field-odd"><p>returns a pd.DataFrame that has shape (58,7), and has column names as shown as below.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_rank_county">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_rank_county</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_rank_county" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if rank_county function works well. It test if its output is a     pd.DataFrame with shape (58, 13), and the columns of the dataframe is as shown below.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_result_visual">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_result_visual</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_result_visual" title="Permalink to this definition">¶</a></dt>
+<dd><p>This funtion test if result_visual works well. It first prepare data, and use the data for rank_county. Then its output is fed in to result_visual, and check if the output is go.Figure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_visualization_food_cost_map">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_visualization_food_cost_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_visualization_food_cost_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if visualization_food_cost_map works well. It ensures the output 
+is a go.Figure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_visualization_food_insecurity_map">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_visualization_food_insecurity_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_visualization_food_insecurity_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if visualization_food_insecurity_map works well. It ensures the output 
+is a go.Figure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_visualization_food_insecurity_plot">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_visualization_food_insecurity_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_visualization_food_insecurity_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if visualization_food_insecurity_plot works well. It ensures the output 
+is a go.Figure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_visualization_food_insecurity_race">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_visualization_food_insecurity_race</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_show</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_visualization_food_insecurity_race" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if visualization_food_insecurity_race works well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p>mock_show: this parameter inputs data for visualization.</p>
+</dd>
+<dt class="field-even">Parameter type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_ProjectCodeCombine.test_visualization_household">
+<span class="sig-prename descclassname"><span class="pre">test_ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">test_visualization_household</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_ProjectCodeCombine.test_visualization_household" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function test if visualization_household works well. It ensures the output 
+is a go.Figure</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="county_ranking_model.html" class="btn btn-neutral float-left" title="countyBasic Questionranking_model module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, ECE229 Group 3.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

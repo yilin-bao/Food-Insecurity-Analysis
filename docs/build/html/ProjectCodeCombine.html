@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProjectCodeCombine module &mdash; Food-Insecurity-Analysis v4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="countyBasic Questionranking_model module" href="county_ranking_model.html" />
+    <link rel="prev" title="Food-Insecurity-Analysis-main" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Food-Insecurity-Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Food-Insecurity-Analysis-main</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ProjectCodeCombine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#file-description">File Description:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="county_ranking_model.html">countyBasic Questionranking_model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_ProjectCodeCombine.html">test_ProjectCodeCombine module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Food-Insecurity-Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Food-Insecurity-Analysis-main</a> &raquo;</li>
+      <li>ProjectCodeCombine module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ProjectCodeCombine.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="projectcodecombine-module">
+<h1>ProjectCodeCombine module<a class="headerlink" href="#projectcodecombine-module" title="Permalink to this headline">¶</a></h1>
+<section id="file-description">
+<h2>File Description:<a class="headerlink" href="#file-description" title="Permalink to this headline">¶</a></h2>
+<p>This file contains data cleaning and visualization. It contains functions that reduce original data file to contain only relevant information such as FIPS and Food Insecurity rate, visualize Food Insecurity rate and cost per meal countrywide, visualizes how household type and race impact Food Insecurity rate, and more. Also, we implemented a pipeline that selects the same factors from multiple files, which allows efficient analysis of annual changes.</p>
+<span class="target" id="module-ProjectCodeCombine"></span><dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.draw_FIrate">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">draw_FIrate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.draw_FIrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reads data from the data/MMG{year0}_{year1}Data_ToShare.xlsx files, 
+and only take the “FIPS” and “{year} Food Insecurity Rate” columns. It then adjust 
+column name to “Rate of Food Insecurity” so it is suitable for later use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>pd.DataFrame: A pd.DataFrame that contains that year’s information of FIPS and 
+Rate of Food Insecurity.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.prepare_data">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.prepare_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will prepare the data in the following 5 categories:
+1. FI: overall food insecurity(fi) rate
+2. FI_Density: density of food insecure people
+3. Child_FI: child fi rate
+4. Budget: budget shortfall
+5. FI_Change: fi changes in recent 2 years</p>
+<p>return: county FIPS, name and data above
+return type: pd.DataFrame</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.rank_county">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">rank_county</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.rank_county" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will rank the counties’ food insecurity degree based on the 5 factors.
+A higher ranking score indicates the county has more severe food insecurity issues.
+:param df: dataframe returned from prepared_data :type: pd.DataFrame
+:return: prepared data with ranking data
+:return type: pd.DataFrame</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.result_visual">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">result_visual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.result_visual" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will visualize the result, a choropleth map, using the ranking data.
+:param df: dataframe returned from rank_county
+:return: none</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.visualization_food_cost_map">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">visualization_food_cost_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.visualization_food_cost_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generates a interactable visuals of the cost per meal data countrywide.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Args</dt>
+<dd class="field-odd"><p>data (pd.DataFrame): data with columns of “FIPS” and “2009 Cost Per Meal”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>go.Figure: The interatable visuals of food price in 2009.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.visualization_food_insecurity_map">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">visualization_food_insecurity_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.visualization_food_insecurity_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>This funciton visualize the data that we cleaned in draw_FIrate, to a US interactable map that 
+is specified to county level, indicating Food Insecurity Rate of each county.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Args</dt>
+<dd class="field-odd"><p>df (pd.DataFrame): the data that we cleaned in draw_FIrate, contains that year’s information of FIPS and Rate of Food Insecurity</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>go.Figure: the go.Figure of the visualization of a US interactable map.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.visualization_food_insecurity_plot">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">visualization_food_insecurity_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.visualization_food_insecurity_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generates bar plot of food inseterity rates in different states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Args</dt>
+<dd class="field-odd"><p>data (pd.DataFrame): This is the data of the past_trend of Food Insecurity, 
+containing information of states and food insecurity.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>go.Figure: Bar plot of food inseterity rates in different states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.visualization_food_insecurity_race">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">visualization_food_insecurity_race</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.visualization_food_insecurity_race" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generates bar plot of Food Insecurity vs race.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Args</dt>
+<dd class="field-odd"><p>data (_type_): This data is from the data_race file, with information of food 
+insecurity rate and race.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ProjectCodeCombine.visualization_household">
+<span class="sig-prename descclassname"><span class="pre">ProjectCodeCombine.</span></span><span class="sig-name descname"><span class="pre">visualization_household</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snap</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ProjectCodeCombine.visualization_household" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generates visualization of Food Insecurity Rate vc household.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Args</dt>
+<dd class="field-odd"><p>snap (pd.DataFrame): This data contains information of Food Insecurity Rate and types
+of house holds, such as With elders or not or Number of Workers.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>go.Figure: A figure of Food Insecurity Rate vc household.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Food-Insecurity-Analysis-main" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="county_ranking_model.html" class="btn btn-neutral float-right" title="countyBasic Questionranking_model module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, ECE229 Group 3.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
