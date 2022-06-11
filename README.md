@@ -4,6 +4,9 @@ ECE 229 Group 3 Project, Spring 2022
 ## Introduction
 According to the United States Department of Agriculture in 2020, 13.8 million households were food insecure, meaning they lacked consistent access to nutritional food. In this project, we made our dashboard with the express purpose to cater to people who want to make a positive change in their community but may not have a strong statistical background. Whether it be a politician’s policy decisions, an organization’s efficient budget or perhaps an individual’s personal time any of these groups can use our dashboard to view a graphical analysis of food insecurity over the past decade in America in order to best allocate their resources to impoverished groups.
 
+## Full Documentation 
+
+
 ## Dashboard Website
 http://44.232.168.218:8866/
 
